@@ -18,6 +18,8 @@ namespace LookingGlass.Toolkit.CLI
         quiltify_RGBD,
         hide,
         lkg_displays,
+        playlist_seek,
+        playlist_resume,
     }
 
     public class CommandLineOptions
@@ -33,6 +35,12 @@ namespace LookingGlass.Toolkit.CLI
 
         [Option('i', "input", HelpText = "Input URI")]
         public string inputFile { get; set; }
+        
+        [Option('n', "playlist_name", Default = "default", HelpText = "Set a playlist name")]
+        public string playlistName { get; set; }
+
+        [Option('s', "seek", Default = 0, HelpText = "Set a seek index")]
+        public int seek { get; set; }
 
         [Option("out", HelpText = "Output Path")]
         public string outputFile { get; set; }

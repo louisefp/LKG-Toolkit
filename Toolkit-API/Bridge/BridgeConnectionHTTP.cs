@@ -401,6 +401,29 @@ namespace LookingGlass.Toolkit.Bridge
             return resp != null;
         }
 
+        public bool TryTransportControlsSeekToIndex(int index = 0) {
+            if (session == null)
+                return false;
+
+            if ((LoggingFlags & BridgeLoggingFlags.Timing) != 0)
+                timer.Restart();
+
+            string message =
+                $@"
+                {{
+                    ""orchestration"": ""{session.Token}""
+                    ""index"": ""{index}""
+                }}
+                ";
+
+            string resp = TrySendMessage("transport_control_seek_to_index", message);
+
+            if ((LoggingFlags & BridgeLoggingFlags.Timing) != 0)
+                PrintTime("transport_control_seek_to_index", timer.Elapsed);
+
+            return resp != null;
+        }
+
         public bool TryShowWindow(bool showWindow, int head = -1) {
             if (session == null)
                 return false;
@@ -700,6 +723,31 @@ namespace LookingGlass.Toolkit.Bridge
             string playMessage = p.GetPlayPlaylistJson(session, head);
             string playResp = TrySendMessage("play_playlist", playMessage);
 
+            return true;
+        }
+    
+        public bool TryBuildPlaylist(Playlist p, int head = -1) {
+            if (session == null)
+                return false;
+
+            if (currentPlaylistName == p.name) {
+                string delete_message = p.GetInstanceJson(session);
+                string delete_resp = TrySendMessage("delete_playlist", delete_message);
+            }
+
+            TryShowWindow(true, head);
+
+            string message = p.GetInstanceJson(session);
+            string resp = TrySendMessage("instance_playlist", message);
+
+            string[] playlistItems = p.GetPlaylistItemsAsJson(session);
+
+            for (int i = 0; i < playlistItems.Length; i++) {
+                string pMessage = playlistItems[i];
+                string pResp = TrySendMessage("insert_playlist_entry", pMessage);
+            }
+
+            currentPlaylistName = p.name;
             return true;
         }
 

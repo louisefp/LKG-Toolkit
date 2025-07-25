@@ -28,7 +28,6 @@ namespace LookingGlass.Toolkit.CLI
                     break;
                 case CLI_Task.play:
                     PlayRGBDItem.Run(args);
-                    //PlayQuiltItem.Run(args);
                     break;
                 case CLI_Task.quiltify_RGBD:
                     QuiltifyRGBDItem.Run(args);
@@ -36,6 +35,15 @@ namespace LookingGlass.Toolkit.CLI
                 case CLI_Task.playlist:
                     PlayPlaylist.Run(args);
                     break;
+                case CLI_Task.build_playlist:
+                    BuildPlaylist.Run(args);
+                    break;
+                case CLI_Task.playlist_seek:
+                     PlaylistSeek.Run(args);
+                     break;
+                case CLI_Task.playlist_resume:
+                     PlaylistResume.Run(args);
+                     break;
                 case CLI_Task.lkg_displays:
                     GetPossibleDevices.Run(args);
                     break;
