@@ -34,6 +34,7 @@ namespace LookingGlass.Toolkit.CLI
                     QuiltifyRGBDItem.Run(args);
                     break;
                 case CLI_Task.playlist:
+                    PlayPlaylist.Run(args);
                     break;
                 case CLI_Task.lkg_displays:
                     GetPossibleDevices.Run(args);
