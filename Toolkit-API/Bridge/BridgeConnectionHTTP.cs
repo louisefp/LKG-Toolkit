@@ -68,7 +68,7 @@ namespace LookingGlass.Toolkit.Bridge
             }
         }
 
-        public BridgeLoggingFlags LoggingFlags { get; set; } = BridgeLoggingFlags.None;
+        public BridgeLoggingFlags LoggingFlags { get; set; } = BridgeLoggingFlags.All;
         internal Dictionary<int, Display> ConnectedDisplays { get; private set; } = new();
         internal List<LKGDeviceInfo> AllSupportedLKGHardware { get; private set; } = new();
 
@@ -213,13 +213,17 @@ namespace LookingGlass.Toolkit.Bridge
             try {
                 if ((loggingFlags & BridgeLoggingFlags.Messages) != 0)
                     PrintMessage(endpoint, content);
-                
+                if ((LoggingFlags & BridgeLoggingFlags.Timing) != 0)
+                    timer.Restart();
+
                 string url = GetURL(endpoint);
 
                 string response = httpSender.Send(HttpSenderMethod.Put, url, content);
-                if ((loggingFlags & BridgeLoggingFlags.Responses) != 0)
-                    PrintResponse(endpoint, response);
+                //if ((loggingFlags & BridgeLoggingFlags.Responses) != 0)
+                //    PrintResponse(endpoint, response);
 
+                if ((LoggingFlags & BridgeLoggingFlags.Timing) != 0)
+                    PrintTime("send_message " +  endpoint, timer.Elapsed);
                 UpdateConnectionState(true);
                 return response;
             } catch (Exception e) {
@@ -411,7 +415,7 @@ namespace LookingGlass.Toolkit.Bridge
             string message =
                 $@"
                 {{
-                    ""orchestration"": ""{session.Token}""
+                    ""orchestration"": ""{session.Token}"",
                     ""index"": ""{index}""
                 }}
                 ";
@@ -702,8 +706,8 @@ namespace LookingGlass.Toolkit.Bridge
                 return false;
 
             if (currentPlaylistName == p.name) {
-                string delete_message = p.GetInstanceJson(session);
-                string delete_resp = TrySendMessage("delete_playlist", delete_message);
+               string delete_message = p.GetInstanceJson(session);
+               string delete_resp = TrySendMessage("delete_playlist", delete_message);
             }
 
             TryShowWindow(true, head);
@@ -735,7 +739,7 @@ namespace LookingGlass.Toolkit.Bridge
                 string delete_resp = TrySendMessage("delete_playlist", delete_message);
             }
 
-            TryShowWindow(true, head);
+            // TryShowWindow(true, head);
 
             string message = p.GetInstanceJson(session);
             string resp = TrySendMessage("instance_playlist", message);
@@ -748,6 +752,29 @@ namespace LookingGlass.Toolkit.Bridge
             }
 
             currentPlaylistName = p.name;
+            return true;
+        }
+
+        public bool TryStudioPlaylist(string p, string name, int head = -1, bool loop = false) {
+            if (session == null)
+                return false;
+
+            TryShowWindow(true, head);
+            string message =
+                $@"
+                {{
+                    ""orchestration"": ""{session.Token}"",
+                    ""name"": ""Studio Playlist"",
+                    ""playlist_path"": ""{p.Replace("\\", "\\\\")}"",
+                    ""loop"": ""true"",
+                    ""perform_test"": ""false""
+                }}
+                ";
+
+            string resp = TrySendMessage("instance_studio_playlist", message);
+            if (!resp.IsNullOrEmpty())
+                return true;
+  
             return true;
         }
 
