@@ -18,8 +18,10 @@ namespace LookingGlass.Toolkit.CLI
         quiltify_RGBD,
         hide,
         lkg_displays,
+        playlist_pause,
         playlist_seek,
         playlist_resume,
+        studio_playlist,
     }
 
     public class CommandLineOptions

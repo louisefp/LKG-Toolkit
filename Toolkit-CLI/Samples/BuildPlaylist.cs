@@ -33,32 +33,33 @@ namespace LookingGlass.Toolkit.CLI.Samples
                     return;
                 }
 
-                if (!b.TrySubscribeToEvents())
-                {
-                    Console.WriteLine("Failed to subscribe to events");
-                    return;
-                }
+                // if (!b.TrySubscribeToEvents())
+                // {
+                //     Console.WriteLine("Failed to subscribe to events");
+                //     return;
+                // }
 
-                if (!b.TryUpdateConnectedDevices())
-                {
-                    Console.WriteLine("Failed to update devices");
-                    return;
-                }
+                // if (!b.TryUpdateConnectedDevices())
+                // {
+                //     Console.WriteLine("Failed to update devices");
+                //     return;
+                // }
 
                 // Load json from disk
-                Console.WriteLine(args.inputFile);
+                //Console.WriteLine(args.inputFile);
                 string jsonString = File.ReadAllText(args.inputFile);
                 string directoryPath = Path.GetDirectoryName(args.inputFile);
                 List<PlaylistItem> playlistItems = JsonSerializer.Deserialize<List<PlaylistItem>>(jsonString);
+                Random rng = new Random();
 
-                Playlist p = new Playlist(args.playlistName, args.loopPlaylist);
+                Playlist p = new Playlist("default_" + rng.Next(0, 10000), args.loopPlaylist);
 
-                Console.WriteLine(jsonString);
+                //Console.WriteLine(jsonString);
                 
                 foreach (PlaylistItem playlistItem in playlistItems)
                 {
                     string itemPath = directoryPath +  Path.DirectorySeparatorChar  + playlistItem.filename + ".json";
-                    Console.WriteLine(itemPath);
+                    //Console.WriteLine(itemPath);
                     string itemJsonString = File.ReadAllText(itemPath);
                     PlaylistItemDetail playlistItemDetail = JsonSerializer.Deserialize<PlaylistItemDetail>(itemJsonString);
                     if (playlistItemDetail.mediaType == "quilt") {
@@ -71,7 +72,7 @@ namespace LookingGlass.Toolkit.CLI.Samples
 
                     }
                     else if (playlistItemDetail.mediaType == "rgbd") {
-                        p.AddRGBDItem(args.inputFile, args.rows, args.cols, args.aspect,
+                        p.AddRGBDItem(directoryPath +  Path.DirectorySeparatorChar + playlistItem.filename, args.rows, args.cols, args.aspect,
                             playlistItemDetail.depthiness,
                             0.9f,   //depth_cutoff
                             playlistItemDetail.focus,
@@ -90,6 +91,19 @@ namespace LookingGlass.Toolkit.CLI.Samples
                     Console.WriteLine("Failed to build playlist");
                     return;
                 }
+                
+                // if (!b.TryTransportControlsSeekToIndex(args.seek))
+                // {
+                //     Console.WriteLine("Failed to seek to index");
+                //     return;
+                // }
+
+                // if (!b.TryTransportControlsPause())
+                // {
+                //     Console.WriteLine("Failed to control pause");
+                //     return;
+                // }
+
 
             }
             else

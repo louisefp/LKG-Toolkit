@@ -33,6 +33,7 @@ namespace LookingGlass.Toolkit.CLI
                     QuiltifyRGBDItem.Run(args);
                     break;
                 case CLI_Task.playlist:
+                    Console.Write("sdjfkljdlk");
                     PlayPlaylist.Run(args);
                     break;
                 case CLI_Task.build_playlist:
@@ -41,11 +42,17 @@ namespace LookingGlass.Toolkit.CLI
                 case CLI_Task.playlist_seek:
                      PlaylistSeek.Run(args);
                      break;
+                case CLI_Task.playlist_pause:
+                     PlaylistPause.Run(args);
+                     break;                
                 case CLI_Task.playlist_resume:
                      PlaylistResume.Run(args);
                      break;
                 case CLI_Task.lkg_displays:
                     GetPossibleDevices.Run(args);
+                    break;
+                case CLI_Task.studio_playlist:
+                    StudioPlaylist.Run(args);
                     break;
             }
 

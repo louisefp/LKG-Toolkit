@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace LookingGlass.Toolkit.CLI.Samples
 {
-    internal class PlaylistResume
+    internal class StudioPlaylist
     {
         public static void Run(CommandLineOptions args)
         {
@@ -39,18 +39,31 @@ namespace LookingGlass.Toolkit.CLI.Samples
                 //     return;
                 // }
 
-                // if (!b.TryUpdateConnectedDevices())
+                if (!b.TryUpdateConnectedDevices())
+                {
+                    Console.WriteLine("Failed to update devices");
+                     return;
+                }
+
+         
+                if (!b.TryStudioPlaylist(args.inputFile, args.playlistName, args.head))
+                {
+                    Console.WriteLine("Failed to instance studio playlist");
+                    return;
+                }
+                
+                // if (!b.TryTransportControlsSeekToIndex(args.seek))
                 // {
-                //     Console.WriteLine("Failed to update devices");
+                //     Console.WriteLine("Failed to seek to index");
                 //     return;
                 // }
 
-                
-                if (!b.TryTransportControlsPlay())
-                {
-                    Console.WriteLine("Failed to control play");
-                    return;
-                }
+                // if (!b.TryTransportControlsPause())
+                // {
+                //     Console.WriteLine("Failed to control pause");
+                //     return;
+                // }
+
 
             }
             else
@@ -59,7 +72,7 @@ namespace LookingGlass.Toolkit.CLI.Samples
                 return;
             }
 
-            Console.WriteLine("Playlist resume done.");
+            Console.WriteLine("Instance studio playlist done.");
         }
 
     }

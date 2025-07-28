@@ -33,23 +33,18 @@ namespace LookingGlass.Toolkit.CLI.Samples
                     return;
                 }
 
-                if (!b.TrySubscribeToEvents())
-                {
-                    Console.WriteLine("Failed to subscribe to events");
-                    return;
-                }
+                // if (!b.TrySubscribeToEvents())
+                // {
+                //     Console.WriteLine("Failed to subscribe to events");
+                //     return;
+                // }
 
-                if (!b.TryUpdateConnectedDevices())
-                {
-                    Console.WriteLine("Failed to update devices");
-                    return;
-                }
+                // if (!b.TryUpdateConnectedDevices())
+                // {
+                //     Console.WriteLine("Failed to update devices");
+                //     return;
+                // }
 
-                if (!b.TryTransportControlsPause())
-                {
-                    Console.WriteLine("Failed to control pause");
-                    return;
-                }
                 
                 if (!b.TryTransportControlsSeekToIndex(args.seek))
                 {

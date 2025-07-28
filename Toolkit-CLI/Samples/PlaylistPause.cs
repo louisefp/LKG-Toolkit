@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace LookingGlass.Toolkit.CLI.Samples
 {
-    internal class PlaylistResume
+    internal class PlaylistPause
     {
         public static void Run(CommandLineOptions args)
         {
@@ -46,9 +46,9 @@ namespace LookingGlass.Toolkit.CLI.Samples
                 // }
 
                 
-                if (!b.TryTransportControlsPlay())
+                if (!b.TryTransportControlsPause())
                 {
-                    Console.WriteLine("Failed to control play");
+                    Console.WriteLine("Failed to control pause");
                     return;
                 }
 

@@ -13,6 +13,8 @@ namespace LookingGlass.Toolkit.CLI.Samples
     {
         public static void Run(CommandLineOptions args)
         {
+                            Console.WriteLine("play");
+
             // Create BridgeConnectionHTTP instance.
             // Make sure to use the using pattern or properly dispose of the BridgeConnectionHTTP object
             using BridgeConnectionHTTP b = new BridgeConnectionHTTP(args.address);
@@ -33,11 +35,11 @@ namespace LookingGlass.Toolkit.CLI.Samples
                     return;
                 }
 
-                if (!b.TrySubscribeToEvents())
-                {
-                    Console.WriteLine("Failed to subscribe to events");
-                    return;
-                }
+                // if (!b.TrySubscribeToEvents())
+                // {
+                //     Console.WriteLine("Failed to subscribe to events");
+                //     return;
+                // }
 
                 if (!b.TryUpdateConnectedDevices())
                 {
@@ -53,7 +55,7 @@ namespace LookingGlass.Toolkit.CLI.Samples
 
                 Playlist p = new Playlist(args.playlistName, args.loopPlaylist);
 
-                Console.WriteLine(jsonString);
+                //Console.WriteLine(jsonString);
                 
                 foreach (PlaylistItem playlistItem in playlistItems)
                 {
@@ -64,13 +66,13 @@ namespace LookingGlass.Toolkit.CLI.Samples
                     if (playlistItemDetail.mediaType == "quilt") {
 
                         p.AddQuiltItem(directoryPath +  Path.DirectorySeparatorChar + playlistItem.filename, 
-                        playlistItemDetail.quilt_settings.viewX, 
                         playlistItemDetail.quilt_settings.viewY, 
+                        playlistItemDetail.quilt_settings.viewX, 
                         playlistItemDetail.quilt_settings.aspect, 
                         playlistItemDetail.quilt_settings.viewTotal);
                     }
                     else if (playlistItemDetail.mediaType == "rgbd") {
-                        p.AddRGBDItem(args.inputFile, args.rows, args.cols, args.aspect,
+                        p.AddRGBDItem(directoryPath +  Path.DirectorySeparatorChar + playlistItem.filename, args.rows, args.cols, args.aspect,
                             playlistItemDetail.depthiness,
                             0.9f,   //depth_cutoff
                             playlistItemDetail.focus,
@@ -95,8 +97,8 @@ namespace LookingGlass.Toolkit.CLI.Samples
                 return;
             }
 
-            //Console.WriteLine("Listening for events, press any key to stop.");
-            //Console.ReadKey();
+            // Console.WriteLine("Listening for events, press any key to stop.");
+            // Console.ReadKey();
         }
 
     }
